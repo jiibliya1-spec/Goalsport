@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoalSport ⚽ — نتائج مباشرة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--g:#00C853;--gd:#009624;--gl:#69F0AE;--dark:#0A0E1A;--dark2:#111827;--dark3:#1C2333;--dark4:#243044;--w:#fff;--g1:#F8F9FA;--g2:#E9ECEF;--g4:#868E96;--live:#FF3D00;--yellow:#FFD600;--blue:#1565C0;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Cairo',sans-serif;background:var(--dark);color:var(--w);overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--dark2);}
+::-webkit-scrollbar-thumb{background:var(--g);border-radius:4px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97);backdrop-filter:blur(14px);border-bottom:2px solid var(–g);padding:0 4%;display:flex;align-items:center;justify-content:space-between;height:58px;}
+.nlogo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nlogo-ic{width:36px;height:36px;background:linear-gradient(135deg,var(–g),var(–gd));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.nlogo-tx{font-family:‘Bebas Neue’,sans-serif;font-size:22px;color:var(–w);letter-spacing:2px;}
+.nlogo-tx span{color:var(–g);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(255,61,0,.15);border:1px solid rgba(255,61,0,.4);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:var(–live);}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(–live);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+.lang-sel{background:var(–dark3);border:1px solid var(–dark4);color:white;font-family:‘Cairo’,sans-serif;font-size:12px;padding:5px 10px;border-radius:8px;cursor:pointer;outline:none;}
+.nav-time{font-family:‘Bebas Neue’,sans-serif;font-size:16px;color:var(–g);letter-spacing:1px;}
+
+/* TICKER */
+.ticker{background:linear-gradient(90deg,var(–g),var(–gd));padding:6px 4%;margin-top:58px;overflow:hidden;display:flex;align-items:center;gap:12px;}
+.ticker-label{font-family:‘Bebas Neue’,sans-serif;font-size:12px;letter-spacing:2px;background:var(–dark);color:var(–g);padding:2px 10px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.ticker-scroll{overflow:hidden;flex:1;}
+.ticker-track{display:flex;gap:0;animation:tick 40s linear infinite;white-space:nowrap;}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{font-size:12px;font-weight:700;color:var(–dark);padding:0 20px;display:inline-flex;align-items:center;gap:8px;}
+.ts{background:var(–dark);color:var(–g);padding:1px 7px;border-radius:4px;font-size:11px;font-weight:900;}
+
+/* AD */
+.ad-wrap{background:var(–dark2);border-bottom:1px solid var(–dark3);padding:10px 4%;display:flex;justify-content:center;}
+.ad-ph{width:100%;max-width:728px;height:90px;background:var(–dark3);border:1px dashed rgba(255,255,255,.1);border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.25);font-size:12px;gap:8px;}
+
+/* MAIN */
+.main{display:grid;grid-template-columns:1fr 300px;gap:0;max-width:1280px;margin:0 auto;padding:14px 4%;}
+@media(max-width:1000px){.main{grid-template-columns:1fr;}.sidebar{display:none!important;}}
+
+/* DATE TABS */
+.date-tabs{display:flex;gap:5px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
+.date-tabs::-webkit-scrollbar{height:2px;}
+.dtab{flex-shrink:0;padding:7px 14px;border-radius:9px;background:var(–dark2);border:1px solid var(–dark3);cursor:pointer;transition:all .2s;text-align:center;min-width:60px;}
+.dtab.active{background:var(–g);border-color:var(–g);}
+.dtab-day{font-size:9px;font-weight:600;color:rgba(255,255,255,.5);}
+.dtab.active .dtab-day{color:rgba(0,0,0,.7);}
+.dtab-num{font-size:18px;font-weight:900;}
+.dtab.active .dtab-num{color:var(–dark);}
+.dtab-mon{font-size:9px;color:rgba(255,255,255,.4);}
+.dtab.active .dtab-mon{color:rgba(0,0,0,.6);}
+
+/* FILTER */
+.filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.ftab{padding:6px 16px;border-radius:20px;border:none;cursor:pointer;font-family:‘Cairo’,sans-serif;font-size:12px;font-weight:700;background:var(–dark2);color:rgba(255,255,255,.6);transition:all .2s;}
+.ftab.active,.ftab:hover{background:var(–g);color:var(–dark);}
+.ftab.live-f{background:rgba(255,61,0,.12);color:var(–live);border:1px solid rgba(255,61,0,.25);}
+.ftab.live-f.active{background:var(–live);color:white;border-color:transparent;}
+.search-wrap{margin-right:auto;display:flex;align-items:center;gap:7px;background:var(–dark2);border:1px solid var(–dark3);border-radius:9px;padding:7px 12px;min-width:180px;}
+.search-wrap svg{width:14px;height:14px;fill:var(–g4);flex-shrink:0;}
+.search-wrap input{background:none;border:none;outline:none;color:white;font-family:‘Cairo’,sans-serif;font-size:12px;width:100%;direction:inherit;}
+.search-wrap input::placeholder{color:rgba(255,255,255,.2);}
+
+/* STATS */
+.stats-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;}
+.stat-pill{flex-shrink:0;background:var(–dark2);border:1px solid var(–dark3);border-radius:10px;padding:10px 16px;text-align:center;}
+.stn{font-family:‘Bebas Neue’,sans-serif;font-size:24px;color:var(–g);}
+.stl{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px;}
+
+/* LEAGUE */
+.league-sec{margin-bottom:5px;border-radius:12px;overflow:hidden;border:1px solid var(–dark3);}
+.league-hdr{display:flex;align-items:center;gap:9px;background:var(–dark2);padding:9px 13px;cursor:pointer;transition:background .2s;}
+.league-hdr:hover{background:var(–dark3);}
+.league-logo{width:26px;height:26px;border-radius:6px;object-fit:contain;background:var(–dark3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.league-name{font-size:13px;font-weight:800;flex:1;}
+.league-country{font-size:10px;color:rgba(255,255,255,.35);}
+.league-badge{font-size:10px;background:var(–dark3);color:var(–g);padding:2px 8px;border-radius:20px;font-weight:700;flex-shrink:0;}
+.league-arr{font-size:11px;color:rgba(255,255,255,.3);transition:transform .2s;flex-shrink:0;}
+.league-sec.closed .league-arr{transform:rotate(-90deg);}
+.league-games{transition:max-height .3s ease,opacity .3s ease;overflow:hidden;}
+.league-sec.closed .league-games{max-height:0!important;opacity:0;}
+
+/* MATCH ROW */
+.match-row{display:flex;align-items:center;padding:10px 13px;background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s;gap:8px;}
+.match-row:hover{background:rgba(255,255,255,.05);}
+.m-time{min-width:46px;text-align:center;font-size:11px;font-weight:700;color:rgba(255,255,255,.45);flex-shrink:0;}
+.m-time.live{color:var(–live);}
+.m-time.done{color:rgba(255,255,255,.25);}
+.m-teams{flex:1;display:flex;flex-direction:column;gap:4px;}
+.m-team{display:flex;align-items:center;gap:7px;justify-content:flex-end;}
+.m-team-logo{width:18px;height:18px;border-radius:50%;object-fit:contain;background:var(–dark3);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.m-team-logo img{width:18px;height:18px;border-radius:50%;object-fit:contain;}
+.m-name{font-size:12px;font-weight:700;}
+.m-name.win{color:var(–g);}
+.m-score-wrap{min-width:58px;flex-shrink:0;display:flex;justify-content:center;}
+.m-score{background:var(–dark3);border-radius:7px;padding:5px 9px;display:flex;align-items:center;gap:5px;font-size:14px;font-weight:900;}
+.m-score.live{background:rgba(255,61,0,.15);border:1px solid rgba(255,61,0,.3);}
+.m-score.done{background:rgba(255,255,255,.06);}
+.m-score-vs{font-size:11px;background:var(–dark3);border-radius:7px;padding:6px 10px;color:rgba(255,255,255,.35);}
+.m-sep{font-size:12px;color:rgba(255,255,255,.25);}
+.m-live-min{font-size:10px;font-weight:700;color:var(–live);background:rgba(255,61,0,.1);padding:2px 5px;border-radius:4px;min-width:26px;text-align:center;flex-shrink:0;}
+
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;gap:14px;}
+.spinner{width:36px;height:36px;border:3px solid rgba(0,200,83,.2);border-top-color:var(–g);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:rgba(255,255,255,.4);}
+
+/* ERROR */
+.error-box{background:rgba(255,61,0,.1);border:1px solid rgba(255,61,0,.3);border-radius:12px;padding:16px;text-align:center;margin:10px 0;}
+.error-box svg{width:28px;height:28px;fill:var(–live);margin-bottom:8px;}
+.error-msg{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:10px;}
+.retry-btn{padding:8px 20px;background:var(–live);color:white;border:none;border-radius:8px;font-family:‘Cairo’,sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+
+/* MODAL */
+.modal-ovr{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:14px;animation:fi .2s ease;}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.modal-ovr.hide{display:none;}
+.modal{background:var(–dark2);border:1px solid var(–dark3);border-radius:20px;width:100%;max-width:400px;overflow:hidden;animation:su .3s ease;}
+@keyframes su{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-hd{background:linear-gradient(135deg,var(–dark3),var(–dark4));padding:14px 16px;display:flex;justify-content:space-between;align-items:center;}
+.modal-league{font-size:12px;color:var(–g);font-weight:700;}
+.modal-close{background:rgba(255,255,255,.1);border:none;color:white;width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:13px;}
+.modal-body{padding:20px 16px;}
+.modal-teams{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin-bottom:14px;}
+.mt-logo{width:52px;height:52px;border-radius:50%;background:var(–dark3);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 6px;}
+.mt-logo img{width:52px;height:52px;border-radius:50%;object-fit:contain;}
+.mt-name{font-size:12px;font-weight:700;}
+.modal-score{font-family:‘Bebas Neue’,sans-serif;font-size:44px;color:white;line-height:1;letter-spacing:2px;}
+.modal-status{display:inline-block;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-top:6px;}
+.ms-live{background:var(–live);color:white;}
+.ms-done{background:rgba(255,255,255,.15);color:rgba(255,255,255,.6);}
+.ms-soon{background:var(–g);color:var(–dark);}
+.modal-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.mi{background:var(–dark3);border-radius:9px;padding:10px;text-align:center;}
+.mi-val{font-size:15px;font-weight:900;color:var(–g);}
+.mi-lbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
+
+/* SIDEBAR */
+.sidebar{padding-left:14px;display:flex;flex-direction:column;gap:12px;}
+.sb-card{background:var(–dark2);border:1px solid var(–dark3);border-radius:12px;overflow:hidden;}
+.sb-title{padding:10px 13px;background:linear-gradient(90deg,var(–g),var(–gd));font-family:‘Bebas Neue’,sans-serif;font-size:14px;letter-spacing:1px;color:var(–dark);display:flex;align-items:center;gap:6px;}
+.sb-title svg{width:14px;height:14px;fill:var(–dark);}
+.st{width:100%;border-collapse:collapse;}
+.st th{font-size:9px;color:rgba(255,255,255,.35);padding:7px 9px;text-align:center;font-weight:600;}
+.st th:first-child{text-align:right;}
+.st td{padding:7px 9px;font-size:11px;border-top:1px solid rgba(255,255,255,.04);text-align:center;}
+.st td:first-child{text-align:right;display:flex;align-items:center;gap:5px;}
+.st tr:hover td{background:rgba(255,255,255,.03);}
+.rk{width:18px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;}
+.rk.c{background:rgba(0,200,83,.2);color:var(–g);}
+.rk.e{background:rgba(21,101,192,.2);color:#64B5F6;}
+.rk.r{background:rgba(211,47,47,.2);color:#EF9A9A;}
+.rk.n{background:var(–dark3);color:rgba(255,255,255,.4);}
+.pts{font-weight:900;color:var(–g);}
+.sc-row{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid rgba(255,255,255,.04);}
+.sc-rk{width:20px;height:20px;border-radius:5px;background:var(–dark3);color:var(–g);font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sc-av{width:28px;height:28px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(–g),var(–gd));display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.sc-av img{width:28px;height:28px;object-fit:cover;}
+.sc-info{flex:1;}
+.sc-name{font-size:11px;font-weight:700;}
+.sc-team{font-size:10px;color:rgba(255,255,255,.35);}
+.sc-goals{font-family:‘Bebas Neue’,sans-serif;font-size:20px;color:var(–g);flex-shrink:0;}
+
+/* FOOTER */
+.footer{background:#050810;border-top:1px solid var(–dark3);padding:30px 4% 14px;margin-top:20px;}
+.footer-inner{max-width:1280px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;margin-bottom:20px;}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}}
+.fl-logo{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.fl-ic{width:28px;height:28px;background:linear-gradient(135deg,var(–g),var(–gd));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.fl-tx{font-family:‘Bebas Neue’,sans-serif;font-size:18px;letter-spacing:2px;}
+.fl-tx span{color:var(–g);}
+.fl-desc{font-size:11px;color:rgba(255,255,255,.35);line-height:1.8;max-width:200px;}
+.fc-title{font-size:11px;font-weight:700;color:var(–g);margin-bottom:10px;letter-spacing:.5px;}
+.fc-links{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.fc-links a{color:rgba(255,255,255,.35);text-decoration:none;font-size:11px;transition:color .2s;}
+.fc-links a:hover{color:var(–g);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:12px;display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.25);flex-wrap:wrap;gap:6px;}
+
+@media(max-width:600px){nav{padding:0 3%;}.nav-time{display:none;}}
+</style>
+
+</head>
+<body>
+
+<!-- MODAL -->
+
+<div class="modal-ovr hide" id="matchModal">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-league" id="mLeague"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-teams">
+        <div>
+          <div class="mt-logo" id="mLogo1"></div>
+          <div class="mt-name" id="mName1"></div>
+        </div>
+        <div style="text-align:center;">
+          <div class="modal-score" id="mScore">— : —</div>
+          <div><span class="modal-status" id="mStatus"></span></div>
+        </div>
+        <div>
+          <div class="mt-logo" id="mLogo2"></div>
+          <div class="mt-name" id="mName2"></div>
+        </div>
+      </div>
+      <div class="modal-info">
+        <div class="mi"><div class="mi-val" id="mDate">—</div><div class="mi-lbl">التاريخ</div></div>
+        <div class="mi"><div class="mi-val" id="mTime2">—</div><div class="mi-lbl">التوقيت</div></div>
+        <div class="mi"><div class="mi-val" id="mRound">—</div><div class="mi-lbl">الجولة</div></div>
+        <div class="mi"><div class="mi-val" id="mVenue">—</div><div class="mi-lbl">الملعب</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+
+<nav>
+  <a href="#" class="nlogo">
+    <div class="nlogo-ic">⚽</div>
+    <span class="nlogo-tx">GOAL<span>SPORT</span></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-time" id="navClock"></span>
+    <div class="live-badge"><div class="live-dot"></div><span id="liveCount">0</span></div>
+    <select class="lang-sel" onchange="setLang(this.value)" id="langSel">
+      <option value="ar">🇸🇦 العربية</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="de">🇩🇪 Deutsch</option>
+      <option value="es">🇪🇸 Español</option>
+    </select>
+  </div>
+</nav>
+
+<!-- TICKER -->
+
+<div class="ticker">
+  <span class="ticker-label">⚡ LIVE</span>
+  <div class="ticker-scroll">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ti">جاري تحميل النتائج... <span class="ts">LIVE</span></span>
+      <span class="ti">GoalSport — نتائج مباشرة من football-data.org <span class="ts">API</span></span>
+      <span class="ti">جاري تحميل النتائج... <span class="ts">LIVE</span></span>
+      <span class="ti">GoalSport — نتائج مباشرة من football-data.org <span class="ts">API</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- AD TOP -->
+
+<div class="ad-wrap">
+  <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script> -->
+  <div class="ad-ph">📢 Google AdSense — 728×90 — ضع كودك هنا بعد الموافقة</div>
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+<div class="content">
+
+  <!-- STATS -->
+
+  <div class="stats-row">
+    <div class="stat-pill"><div class="stn" id="stTotal">—</div><div class="stl" id="stTotalL">مباراة اليوم</div></div>
+    <div class="stat-pill"><div class="stn" style="color:var(--live)" id="stLive">0</div><div class="stl" id="stLiveL">مباشر</div></div>
+    <div class="stat-pill"><div class="stn" style="color:var(--yellow)" id="stLeagues">—</div><div class="stl" id="stLeaguesL">دوريات</div></div>
+    <div class="stat-pill"><div class="stn" id="stFinished">—</div><div class="stl" id="stFinishedL">منتهية</div></div>
+  </div>
+
+  <!-- DATE TABS -->
+
+  <div class="date-tabs" id="dateTabs"></div>
+
+  <!-- FILTER + SEARCH -->
+
+  <div class="filter-row">
+    <button class="ftab active" onclick="setFilter(this,'ALL')" id="fAll">الكل</button>
+    <button class="ftab live-f" onclick="setFilter(this,'LIVE')" id="fLive">🔴 مباشر</button>
+    <button class="ftab" onclick="setFilter(this,'UPCOMING')" id="fUp">قادمة</button>
+    <button class="ftab" onclick="setFilter(this,'FINISHED')" id="fDone">منتهية</button>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" id="searchInput" placeholder="ابحث..." oninput="applyFilters()">
+    </div>
+  </div>
+
+  <!-- MATCHES LIST -->
+
+  <div id="matchesList">
+    <div class="loading"><div class="spinner"></div><div class="loading-text">جاري تحميل المباريات...</div></div>
+  </div>
+
+  <!-- AD MID -->
+
+  <div class="ad-wrap" style="background:transparent;border:none;padding:10px 0;">
+    <div class="ad-ph" style="height:60px;">📢 إعلان AdSense بين المحتوى</div>
+  </div>
+
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="sidebar">
+  <div class="sb-card">
+    <div class="sb-title"><svg viewBox="0 0 24 24"><path d="M11 7H13V9H11zm0 4H13V17H11zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>ترتيب البريميرليج</div>
+    <div id="standingsBody"><div style="padding:20px;text-align:center;color:rgba(255,255,255,.3);font-size:12px;">جاري التحميل...</div></div>
+  </div>
+  <div style="background:var(--dark2);border:1px dashed rgba(255,255,255,.1);border-radius:10px;height:250px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.2);font-size:11px;flex-direction:column;gap:4px;">📢 AdSense 300×250</div>
+  <div class="sb-card">
+    <div class="sb-title"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>هدافو البريميرليج</div>
+    <div id="scorersList"><div style="padding:20px;text-align:center;color:rgba(255,255,255,.3);font-size:12px;">جاري التحميل...</div></div>
+  </div>
+</div>
+</div>
+
+<!-- AD BOTTOM -->
+
+<div class="ad-wrap">
+  <div class="ad-ph">📢 Google AdSense — قبل الفوتر</div>
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="fl-logo"><div class="fl-ic">⚽</div><span class="fl-tx">GOAL<span>SPORT</span></span></div>
+        <p class="fl-desc">نتائج مباريات مباشرة، جداول الترتيب، وأخبار كرة القدم بـ 5 لغات. البيانات من football-data.org</p>
+      </div>
+      <div>
+        <div class="fc-title">الدوريات</div>
+        <ul class="fc-links">
+          <li><a href="#">الدوري الإنجليزي</a></li>
+          <li><a href="#">الدوري الإسباني</a></li>
+          <li><a href="#">الدوري الألماني</a></li>
+          <li><a href="#">دوري الأبطال</a></li>
+          <li><a href="#">الدوري الفرنسي</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fc-title">GoalSport</div>
+        <ul class="fc-links">
+          <li><a href="#">عن الموقع</a></li>
+          <li><a href="#">تواصل معنا</a></li>
+          <li><a href="#">سياسة الخصوصية</a></li>
+          <li><a href="#">الإعلان معنا</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 GoalSport — جميع الحقوق محفوظة</span>
+      <span>Data provided by football-data.org</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== CONFIG =====================
+const API_KEY = 'dea11406ef13451fa55f1e59334b4faf';
+const BASE = 'https://api.football-data.org/v4';
+
+// Supported competitions on free tier
+const COMPETITIONS = [
+  {id:'PL',  name:'الدوري الإنجليزي 🏴󠁧󠁢󠁥󠁮󠁧󠁿', country:'إنجلترا'},
+  {id:'PD',  name:'الدوري الإسباني 🇪🇸',     country:'إسبانيا'},
+  {id:'BL1', name:'الدوري الألماني 🇩🇪',     country:'ألمانيا'},
+  {id:'SA',  name:'الدوري الإيطالي 🇮🇹',     country:'إيطاليا'},
+  {id:'FL1', name:'الدوري الفرنسي 🇫🇷',     country:'فرنسا'},
+  {id:'CL',  name:'دوري أبطال أوروبا 🏆',   country:'أوروبا'},
+  {id:'EC',  name:'دوري أمم أوروبا 🌍',     country:'أوروبا'},
+  {id:'WC',  name:'كأس العالم 🌍',          country:'العالم'},
+];
+
+// ===================== TRANSLATIONS =====================
+const T = {
+  ar:{all:'الكل',live:'🔴 مباشر',upcoming:'قادمة',finished:'منتهية',today:'اليوم',loading:'جاري التحميل...',noMatches:'لا توجد مباريات',search:'ابحث...',standings:'الترتيب',scorers:'الهدافون',totalM:'مباراة اليوم',liveN:'مباشر',leaguesN:'دوريات',finN:'منتهية',days:['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'],months:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],dir:'rtl'},
+  en:{all:'All',live:'🔴 Live',upcoming:'Upcoming',finished:'Finished',today:'Today',loading:'Loading...',noMatches:'No matches',search:'Search...',standings:'Standings',scorers:'Top Scorers',totalM:"Today's Matches",liveN:'Live',leaguesN:'Leagues',finN:'Finished',days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],dir:'ltr'},
+  fr:{all:'Tous',live:'🔴 En direct',upcoming:'À venir',finished:'Terminés',today:"Aujourd'hui",loading:'Chargement...',noMatches:'Aucun match',search:'Rechercher...',standings:'Classement',scorers:'Buteurs',totalM:"Matchs aujourd'hui",liveN:'En direct',leaguesN:'Ligues',finN:'Terminés',days:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],months:['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],dir:'ltr'},
+  de:{all:'Alle',live:'🔴 Live',upcoming:'Kommend',finished:'Beendet',today:'Heute',loading:'Laden...',noMatches:'Keine Spiele',search:'Suchen...',standings:'Tabelle',scorers:'Torschützen',totalM:'Spiele heute',liveN:'Live',leaguesN:'Ligen',finN:'Beendet',days:['So','Mo','Di','Mi','Do','Fr','Sa'],months:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],dir:'ltr'},
+  es:{all:'Todo',live:'🔴 En vivo',upcoming:'Próximos',finished:'Terminados',today:'Hoy',loading:'Cargando...',noMatches:'Sin partidos',search:'Buscar...',standings:'Clasificación',scorers:'Goleadores',totalM:'Partidos hoy',liveN:'En vivo',leaguesN:'Ligas',finN:'Terminados',days:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],months:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],dir:'ltr'},
+};
+
+let lang = 'ar';
+let allMatches = [];
+let currentFilter = 'ALL';
+let currentDateOffset = 0;
+
+// ===================== API FETCH =====================
+async function fetchAPI(path) {
+  // Try direct first (works on Netlify/HTTPS), then proxy fallback
+  const url = BASE + path;
+  const proxies = [
+    // Direct (works when deployed on Netlify)
+    async () => {
+      const r = await fetch(url, {
+        headers: {'X-Auth-Token': API_KEY},
+        mode: 'cors'
+      });
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    },
+    // Proxy 1: allorigins
+    async () => {
+      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url + (url.includes('?')?'&':'?') + '_auth=' + API_KEY);
+      const r = await fetch(proxyUrl);
+      if(!r.ok) throw new Error('Proxy1 HTTP ' + r.status);
+      return r.json();
+    },
+    // Proxy 2: corsproxy.io
+    async () => {
+      const r = await fetch('https://corsproxy.io/?' + encodeURIComponent(url), {
+        headers: {'X-Auth-Token': API_KEY}
+      });
+      if(!r.ok) throw new Error('Proxy2 HTTP ' + r.status);
+      return r.json();
+    }
+  ];
+
+  for(const tryFetch of proxies) {
+    try {
+      return await tryFetch();
+    } catch(e) {
+      console.log('Fetch attempt failed:', e.message);
+    }
+  }
+  throw new Error('All fetch attempts failed');
+}
+
+// ===================== LOAD MATCHES =====================
+async function loadMatches(offset = 0) {
+  currentDateOffset = offset;
+  const t = T[lang];
+  document.getElementById('matchesList').innerHTML = `<div class="loading"><div class="spinner"></div><div class="loading-text">${t.loading}</div></div>`;
+
+  const date = new Date();
+  date.setDate(date.getDate() + offset);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth()+1).padStart(2,'0');
+  const dd = String(date.getDate()).padStart(2,'0');
+  const dateStr = `${yyyy}-${mm}-${dd}`;
+
+  try {
+    const data = await fetchAPI(`/matches?date=${dateStr}`);
+    allMatches = data.matches || [];
+    updateStats();
+    applyFilters();
+    updateTicker();
+    // Load sidebar data
+    loadStandings('PL');
+    loadScorers('PL');
+  } catch(e) {
+    console.error(e);
+    document.getElementById('matchesList').innerHTML = `
+      <div class="error-box">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <div class="error-msg">جاري المحاولة عبر proxy... انتظر لحظة</div>
+        <button class="retry-btn" onclick="loadMatches(${offset})">إعادة المحاولة</button>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:8px;">للنتائج الأفضل: انشر الموقع على Netlify</div>
+      </div>`;
+  }
+}
+
+// ===================== RENDER MATCHES =====================
+function applyFilters() {
+  const t = T[lang];
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = allMatches;
+
+  if(currentFilter === 'LIVE') filtered = filtered.filter(m => m.status === 'IN_PROGRESS' || m.status === 'LIVE' || m.status === 'PAUSED' || m.status === 'HALFTIME');
+  else if(currentFilter === 'UPCOMING') filtered = filtered.filter(m => m.status === 'TIMED' || m.status === 'SCHEDULED');
+  else if(currentFilter === 'FINISHED') filtered = filtered.filter(m => m.status === 'FINISHED');
+
+  if(search) filtered = filtered.filter(m =>
+    m.homeTeam.name.toLowerCase().includes(search) ||
+    m.awayTeam.name.toLowerCase().includes(search) ||
+    m.competition.name.toLowerCase().includes(search)
+  );
+
+  if(filtered.length === 0) {
+    document.getElementById('matchesList').innerHTML = `<div style="text-align:center;padding:50px;color:rgba(255,255,255,.3);font-size:14px;">${t.noMatches}</div>`;
+    return;
+  }
+
+  // Group by competition
+  const byComp = {};
+  filtered.forEach(m => {
+    const key = m.competition.id;
+    if(!byComp[key]) byComp[key] = {name: m.competition.name, emblem: m.competition.emblem, matches:[]};
+    byComp[key].matches.push(m);
+  });
+
+  let html = '';
+  Object.values(byComp).forEach(comp => {
+    html += `<div class="league-sec">
+      <div class="league-hdr" onclick="toggleLeague(this)">
+        <div class="league-logo">${comp.emblem ? `<img src="${comp.emblem}" onerror="this.style.display='none'" width="20">` : '⚽'}</div>
+        <span class="league-name">${translateLeague(comp.name)}</span>
+        <span class="league-badge">${comp.matches.length}</span>
+        <span class="league-arr">▾</span>
+      </div>
+      <div class="league-games" style="max-height:2000px">`;
+
+    comp.matches.forEach(m => {
+      const isLive = ['IN_PROGRESS','LIVE','PAUSED','HALFTIME'].includes(m.status);
+      const isDone = m.status === 'FINISHED';
+      const isSoon = m.status === 'TIMED' || m.status === 'SCHEDULED';
+
+      const kickoff = new Date(m.utcDate);
+      const localH = String(kickoff.getHours()).padStart(2,'0');
+      const localM = String(kickoff.getMinutes()).padStart(2,'0');
+      const timeStr = localH + ':' + localM;
+
+      const hs = isDone || isLive ? (m.score?.fullTime?.home ?? m.score?.halfTime?.home ?? '?') : null;
+      const as2 = isDone || isLive ? (m.score?.fullTime?.away ?? m.score?.halfTime?.away ?? '?') : null;
+
+      const hWin = isDone && hs > as2;
+      const aWin = isDone && as2 > hs;
+
+      const scoreHTML = (hs !== null)
+        ? `<div class="m-score ${isLive?'live':''} ${isDone?'done':''}"><span>${hs}</span><span class="m-sep">—</span><span>${as2}</span></div>`
+        : `<div class="m-score-vs">${timeStr}</div>`;
+
+      const hLogo = m.homeTeam.crest ? `<img src="${m.homeTeam.crest}" onerror="this.style.display='none'" width="18">` : '';
+      const aLogo = m.awayTeam.crest ? `<img src="${m.awayTeam.crest}" onerror="this.style.display='none'" width="18">` : '';
+
+      const minute = m.minute ? `<span class="m-live-min">${m.minute}'</span>` : '';
+
+      html += `<div class="match-row" onclick="openModal(${JSON.stringify(m).replace(/"/g,'&quot;')})">
+        <div class="m-time ${isLive?'live':''} ${isDone?'done':''}">${isLive?'🔴':timeStr}</div>
+        <div class="m-teams">
+          <div class="m-team"><span class="m-name ${hWin?'win':''}">${m.homeTeam.shortName||m.homeTeam.name}</span><div class="m-team-logo">${hLogo}</div></div>
+          <div class="m-team"><span class="m-name ${aWin?'win':''}">${m.awayTeam.shortName||m.awayTeam.name}</span><div class="m-team-logo">${aLogo}</div></div>
+        </div>
+        <div class="m-score-wrap">${scoreHTML}</div>
+        <div>${minute}</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  document.getElementById('matchesList').innerHTML = html;
+}
+
+function translateLeague(name) {
+  const map = {
+    'Premier League':'الدوري الإنجليزي 🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    'Primera Division':'الدوري الإسباني 🇪🇸',
+    'Bundesliga':'الدوري الألماني 🇩🇪',
+    'Serie A':'الدوري الإيطالي 🇮🇹',
+    'Ligue 1':'الدوري الفرنسي 🇫🇷',
+    'UEFA Champions League':'دوري أبطال أوروبا 🏆',
+    'UEFA Europa League':'الدوري الأوروبي',
+    'FIFA World Cup':'كأس العالم 🌍',
+    'European Championship':'يورو 2024 🇪🇺',
+  };
+  if(lang === 'ar') return map[name] || name;
+  return name;
+}
+
+function toggleLeague(hdr) {
+  hdr.closest('.league-sec').classList.toggle('closed');
+}
+
+// ===================== MODAL =====================
+function openModal(mData) {
+  let m = typeof mData === 'string' ? JSON.parse(mData) : mData;
+  document.getElementById('mLeague').textContent = translateLeague(m.competition.name);
+
+  // Logos
+  const h1 = document.getElementById('mLogo1');
+  const h2 = document.getElementById('mLogo2');
+  h1.innerHTML = m.homeTeam.crest ? `<img src="${m.homeTeam.crest}" width="48" onerror="this.style.display='none'">` : '⚽';
+  h2.innerHTML = m.awayTeam.crest ? `<img src="${m.awayTeam.crest}" width="48" onerror="this.style.display='none'">` : '⚽';
+
+  document.getElementById('mName1').textContent = m.homeTeam.name;
+  document.getElementById('mName2').textContent = m.awayTeam.name;
+
+  const isLive = ['IN_PROGRESS','LIVE','PAUSED','HALFTIME'].includes(m.status);
+  const isDone = m.status === 'FINISHED';
+  const hs = m.score?.fullTime?.home ?? m.score?.halfTime?.home;
+  const as2 = m.score?.fullTime?.away ?? m.score?.halfTime?.away;
+  document.getElementById('mScore').textContent = (hs !== null && hs !== undefined) ? `${hs} : ${as2}` : '— : —';
+
+  const statusEl = document.getElementById('mStatus');
+  if(isLive) { statusEl.textContent = (m.minute?m.minute+"' ":'') + 'مباشر'; statusEl.className = 'modal-status ms-live'; }
+  else if(isDone) { statusEl.textContent = 'انتهت'; statusEl.className = 'modal-status ms-done'; }
+  else { const d=new Date(m.utcDate); statusEl.textContent = d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); statusEl.className = 'modal-status ms-soon'; }
+
+  const d = new Date(m.utcDate);
+  document.getElementById('mDate').textContent = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+  document.getElementById('mTime2').textContent = d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+  document.getElementById('mRound').textContent = m.matchday ? 'الجولة '+m.matchday : '—';
+  document.getElementById('mVenue').textContent = m.venue || '—';
+
+  document.getElementById('matchModal').classList.remove('hide');
+}
+
+function closeModal() { document.getElementById('matchModal').classList.add('hide'); }
+document.getElementById('matchModal').addEventListener('click', function(e){if(e.target===this)closeModal();});
+
+// ===================== STATS =====================
+function updateStats() {
+  const t = T[lang];
+  const total = allMatches.length;
+  const live = allMatches.filter(m => ['IN_PROGRESS','LIVE','PAUSED','HALFTIME'].includes(m.status)).length;
+  const leagues = new Set(allMatches.map(m => m.competition.id)).size;
+  const done = allMatches.filter(m => m.status === 'FINISHED').length;
+
+  document.getElementById('stTotal').textContent = total;
+  document.getElementById('stLive').textContent = live;
+  document.getElementById('stLeagues').textContent = leagues;
+  document.getElementById('stFinished').textContent = done;
+  document.getElementById('liveCount').textContent = live + ' مباشر';
+
+  document.getElementById('stTotalL').textContent = t.totalM;
+  document.getElementById('stLiveL').textContent = t.liveN;
+  document.getElementById('stLeaguesL').textContent = t.leaguesN;
+  document.getElementById('stFinishedL').textContent = t.finN;
+}
+
+// ===================== TICKER =====================
+function updateTicker() {
+  const liveMatches = allMatches.filter(m => ['IN_PROGRESS','LIVE','PAUSED','HALFTIME'].includes(m.status));
+  const doneMatches = allMatches.filter(m => m.status === 'FINISHED').slice(0, 10);
+  const all = [...liveMatches, ...doneMatches];
+  if(all.length === 0) return;
+
+  let html = '';
+  for(let i=0;i<2;i++) {
+    all.forEach(m => {
+      const hs = m.score?.fullTime?.home ?? m.score?.halfTime?.home ?? '?';
+      const as2 = m.score?.fullTime?.away ?? m.score?.halfTime?.away ?? '?';
+      html += `<span class="ti">${m.homeTeam.shortName||m.homeTeam.name} <span class="ts">${hs} — ${as2}</span> ${m.awayTeam.shortName||m.awayTeam.name}</span>`;
+    });
+  }
+  document.getElementById('tickerTrack').innerHTML = html;
+}
+
+// ===================== STANDINGS =====================
+async function loadStandings(competitionId) {
+  try {
+    const data = await fetchAPI(`/competitions/${competitionId}/standings`);
+    const standings = data.standings?.find(s => s.type === 'TOTAL')?.table || [];
+    if(standings.length === 0) return;
+
+    const comp = data.competition;
+    document.querySelector('.sb-card:first-child .sb-title').innerHTML = `<svg viewBox="0 0 24 24"><path d="M11 7H13V9H11zm0 4H13V17H11zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>ترتيب ${translateLeague(comp.name)}`;
+
+    const rows = standings.slice(0, 8).map((s, i) => {
+      const total = standings.length;
+      let rkClass = i < 4 ? 'c' : i < 6 ? 'e' : i >= total - 3 ? 'r' : 'n';
+      const logo = s.team.crest ? `<img src="${s.team.crest}" width="16" height="16" style="border-radius:50%;object-fit:contain;" onerror="this.style.display='none'">` : '';
+      return `<tr>
+        <td><span class="rk ${rkClass}">${s.position}</span>${logo}${s.team.shortName||s.team.name}</td>
+        <td>${s.won}</td><td>${s.draw}</td><td>${s.lost}</td>
+        <td class="pts">${s.points}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('standingsBody').innerHTML = `<table class="st"><thead><tr><th>الفريق</th><th>ف</th><th>ت</th><th>خ</th><th>ن</th></tr></thead><tbody>${rows}</tbody></table>`;
+  } catch(e) {
+    document.getElementById('standingsBody').innerHTML = `<div style="padding:14px;text-align:center;color:rgba(255,255,255,.3);font-size:12px;">تعذّر تحميل الترتيب</div>`;
+  }
+}
+
+// ===================== SCORERS =====================
+async function loadScorers(competitionId) {
+  try {
+    const data = await fetchAPI(`/competitions/${competitionId}/scorers?limit=5`);
+    const scorers = data.scorers || [];
+    if(scorers.length === 0) return;
+
+    const comp = data.competition;
+    document.querySelector('.sb-card:last-child .sb-title').innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>هدافو ${translateLeague(comp.name)}`;
+
+    const html = scorers.map((s, i) => {
+      const logo = s.player?.photo ? `<img src="${s.player.photo}" onerror="this.style.display='none'">` : s.team?.crest ? `<img src="${s.team.crest}" style="border-radius:50%;" onerror="this.style.display='none'">` : '⚽';
+      return `<div class="sc-row">
+        <div class="sc-rk">${i+1}</div>
+        <div class="sc-av">${logo}</div>
+        <div class="sc-info">
+          <div class="sc-name">${s.player?.name || '—'}</div>
+          <div class="sc-team">${s.team?.shortName || s.team?.name || '—'}</div>
+        </div>
+        <div class="sc-goals">${s.goals}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('scorersList').innerHTML = html;
+  } catch(e) {
+    document.getElementById('scorersList').innerHTML = `<div style="padding:14px;text-align:center;color:rgba(255,255,255,.3);font-size:12px;">تعذّر تحميل الهدافين</div>`;
+  }
+}
+
+// ===================== FILTER =====================
+function setFilter(el, filter) {
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = filter;
+  applyFilters();
+}
+
+// ===================== DATE TABS =====================
+function buildDateTabs() {
+  const t = T[lang];
+  const now = new Date();
+  let html = '';
+  for(let i=-2; i<=4; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate()+i);
+    const dayName = t.days[d.getDay()];
+    const num = d.getDate();
+    const mon = t.months[d.getMonth()];
+    const active = i===0?'active':'';
+    html += `<div class="dtab ${active}" onclick="selectDate(this,${i})">
+      <div class="dtab-day">${i===0?t.today:dayName}</div>
+      <div class="dtab-num">${num}</div>
+      <div class="dtab-mon">${mon}</div>
+    </div>`;
+  }
+  document.getElementById('dateTabs').innerHTML = html;
+}
+
+function selectDate(el, offset) {
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  loadMatches(offset);
+}
+
+// ===================== LANGUAGE =====================
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = T[l].dir;
+  document.getElementById('searchInput').placeholder = T[l].search;
+  document.getElementById('fAll').textContent = T[l].all;
+  document.getElementById('fLive').textContent = T[l].live;
+  document.getElementById('fUp').textContent = T[l].upcoming;
+  document.getElementById('fDone').textContent = T[l].finished;
+  buildDateTabs();
+  applyFilters();
+  updateStats();
+}
+
+// ===================== CLOCK =====================
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('navClock').textContent = h+':'+m+':'+s;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ===================== AUTO REFRESH =====================
+setInterval(() => { loadMatches(currentDateOffset); }, 60000);
+
+// ===================== INIT =====================
+buildDateTabs();
+loadMatches(0);
+</script>
+
+</body>
+</html>
