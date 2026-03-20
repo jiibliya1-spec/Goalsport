@@ -186,8 +186,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
 .footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:12px;display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.25);flex-wrap:wrap;gap:6px;}
 
 @media(max-width:600px){nav{padding:0 3%;}.nav-time{display:none;}}
-</style>
+.lang-wrap{display:flex;align-items:center;gap:5px;background:var(–dark3);border:1px solid var(–dark4);border-radius:8px;padding:5px 8px;}
+.nlogo-ic{background:linear-gradient(135deg,var(–g),var(–gd));border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
 
+</style>
 </head>
 <body>
 
@@ -228,26 +230,35 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
 
 <nav>
   <a href="#" class="nlogo">
-    <div class="nlogo-ic">⚽</div>
+    <div class="nlogo-ic">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.93 0 3.68.66 5.08 1.74l-1.42 1.42A7.93 7.93 0 0 0 12 6c-1.3 0-2.52.31-3.59.86L7 5.46A9.94 9.94 0 0 1 12 4zm-7.54 3.46l1.42 1.42A7.94 7.94 0 0 0 4 12c0 1.3.31 2.52.86 3.59L3.46 17A9.94 9.94 0 0 1 2 12c0-1.93.66-3.68 1.74-5.08l.72.54zm15.08 0C20.62 8.86 22 10.37 22 12c0 1.93-.66 3.68-1.74 5.08l-1.42-1.42A7.93 7.93 0 0 0 20 12c0-1.3-.31-2.52-.86-3.59l1.4-1.95zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+    </div>
     <span class="nlogo-tx">GOAL<span>SPORT</span></span>
   </a>
   <div class="nav-right">
     <span class="nav-time" id="navClock"></span>
-    <div class="live-badge"><div class="live-dot"></div><span id="liveCount">0</span></div>
-    <select class="lang-sel" onchange="setLang(this.value)" id="langSel">
-      <option value="ar">🇸🇦 العربية</option>
-      <option value="fr">🇫🇷 Français</option>
-      <option value="en">🇬🇧 English</option>
-      <option value="de">🇩🇪 Deutsch</option>
-      <option value="es">🇪🇸 Español</option>
-    </select>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span id="liveCount">0</span>
+      <span id="liveLabel"> Live</span>
+    </div>
+    <div class="lang-wrap">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="rgba(255,255,255,.6)"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+      <select class="lang-sel" onchange="setLang(this.value)" id="langSel">
+        <option value="ar">العربية</option>
+        <option value="fr">Français</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
   </div>
 </nav>
 
 <!-- TICKER -->
 
 <div class="ticker">
-  <span class="ticker-label">⚡ LIVE</span>
+  <span class="ticker-label"><svg viewBox="0 0 24 24" width="12" height="12" fill="var(--g)" style="vertical-align:middle;margin-left:4px;"><path d="M7 2v11h3v9l7-12h-4l4-11z"/></svg> LIVE</span>
   <div class="ticker-scroll">
     <div class="ticker-track" id="tickerTrack">
       <span class="ti">جاري تحميل النتائج... <span class="ts">LIVE</span></span>
@@ -262,7 +273,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
 
 <div class="ad-wrap">
   <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script> -->
-  <div class="ad-ph">📢 Google AdSense — 728×90 — ضع كودك هنا بعد الموافقة</div>
+  <div class="ad-ph">إعلان Google AdSense — 728×90</div>
 </div>
 
 <!-- MAIN -->
@@ -287,7 +298,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
 
   <div class="filter-row">
     <button class="ftab active" onclick="setFilter(this,'ALL')" id="fAll">الكل</button>
-    <button class="ftab live-f" onclick="setFilter(this,'LIVE')" id="fLive">🔴 مباشر</button>
+    <button class="ftab live-f" onclick="setFilter(this,'LIVE')" id="fLive"><svg viewBox="0 0 10 10" width="8" height="8" style="margin-left:4px;vertical-align:middle;"><circle cx="5" cy="5" r="5" fill="var(--live)"/></svg> مباشر</button>
     <button class="ftab" onclick="setFilter(this,'UPCOMING')" id="fUp">قادمة</button>
     <button class="ftab" onclick="setFilter(this,'FINISHED')" id="fDone">منتهية</button>
     <div class="search-wrap">
@@ -305,7 +316,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
   <!-- AD MID -->
 
   <div class="ad-wrap" style="background:transparent;border:none;padding:10px 0;">
-    <div class="ad-ph" style="height:60px;">📢 إعلان AdSense بين المحتوى</div>
+    <div class="ad-ph" style="height:60px;">إعلان AdSense</div>
   </div>
 
 </div>
@@ -328,7 +339,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
 <!-- AD BOTTOM -->
 
 <div class="ad-wrap">
-  <div class="ad-ph">📢 Google AdSense — قبل الفوتر</div>
+  <div class="ad-ph">إعلان Google AdSense</div>
 </div>
 
 <!-- FOOTER -->
@@ -337,7 +348,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,26,.97
   <div class="footer-inner">
     <div class="footer-grid">
       <div>
-        <div class="fl-logo"><div class="fl-ic">⚽</div><span class="fl-tx">GOAL<span>SPORT</span></span></div>
+        <div class="fl-logo"><div class="fl-ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c1.93 0 3.68.66 5.08 1.74l-1.42 1.42A7.93 7.93 0 0 0 12 6c-1.3 0-2.52.31-3.59.86L7 5.46A9.94 9.94 0 0 1 12 4zm-7.54 3.46l1.42 1.42A7.94 7.94 0 0 0 4 12c0 1.3.31 2.52.86 3.59L3.46 17A9.94 9.94 0 0 1 2 12c0-1.93.66-3.68 1.74-5.08l.72.54z"/></svg></div><span class="fl-tx">GOAL<span>SPORT</span></span></div>
         <p class="fl-desc">نتائج مباريات مباشرة، جداول الترتيب، وأخبار كرة القدم بـ 5 لغات. البيانات من football-data.org</p>
       </div>
       <div>
@@ -386,11 +397,11 @@ const COMPETITIONS = [
 
 // ===================== TRANSLATIONS =====================
 const T = {
-  ar:{all:'الكل',live:'🔴 مباشر',upcoming:'قادمة',finished:'منتهية',today:'اليوم',loading:'جاري التحميل...',noMatches:'لا توجد مباريات',search:'ابحث...',standings:'الترتيب',scorers:'الهدافون',totalM:'مباراة اليوم',liveN:'مباشر',leaguesN:'دوريات',finN:'منتهية',days:['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'],months:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],dir:'rtl'},
-  en:{all:'All',live:'🔴 Live',upcoming:'Upcoming',finished:'Finished',today:'Today',loading:'Loading...',noMatches:'No matches',search:'Search...',standings:'Standings',scorers:'Top Scorers',totalM:"Today's Matches",liveN:'Live',leaguesN:'Leagues',finN:'Finished',days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],dir:'ltr'},
-  fr:{all:'Tous',live:'🔴 En direct',upcoming:'À venir',finished:'Terminés',today:"Aujourd'hui",loading:'Chargement...',noMatches:'Aucun match',search:'Rechercher...',standings:'Classement',scorers:'Buteurs',totalM:"Matchs aujourd'hui",liveN:'En direct',leaguesN:'Ligues',finN:'Terminés',days:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],months:['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],dir:'ltr'},
-  de:{all:'Alle',live:'🔴 Live',upcoming:'Kommend',finished:'Beendet',today:'Heute',loading:'Laden...',noMatches:'Keine Spiele',search:'Suchen...',standings:'Tabelle',scorers:'Torschützen',totalM:'Spiele heute',liveN:'Live',leaguesN:'Ligen',finN:'Beendet',days:['So','Mo','Di','Mi','Do','Fr','Sa'],months:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],dir:'ltr'},
-  es:{all:'Todo',live:'🔴 En vivo',upcoming:'Próximos',finished:'Terminados',today:'Hoy',loading:'Cargando...',noMatches:'Sin partidos',search:'Buscar...',standings:'Clasificación',scorers:'Goleadores',totalM:'Partidos hoy',liveN:'En vivo',leaguesN:'Ligas',finN:'Terminados',days:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],months:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],dir:'ltr'},
+  ar:{all:'الكل',live:'مباشر',upcoming:'قادمة',finished:'منتهية',today:'اليوم',loading:'جاري التحميل...',noMatches:'لا توجد مباريات',search:'ابحث...',standings:'الترتيب',scorers:'الهدافون',totalM:'مباراة اليوم',liveN:'مباشر',leaguesN:'دوريات',finN:'منتهية',days:['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'],months:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],dir:'rtl'},
+  en:{all:'All',live:'Live',upcoming:'Upcoming',finished:'Finished',today:'Today',loading:'Loading...',noMatches:'No matches',search:'Search...',standings:'Standings',scorers:'Top Scorers',totalM:"Today's Matches",liveN:'Live',leaguesN:'Leagues',finN:'Finished',days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],dir:'ltr'},
+  fr:{all:'Tous',live:'En direct',upcoming:'À venir',finished:'Terminés',today:"Aujourd'hui",loading:'Chargement...',noMatches:'Aucun match',search:'Rechercher...',standings:'Classement',scorers:'Buteurs',totalM:"Matchs aujourd'hui",liveN:'En direct',leaguesN:'Ligues',finN:'Terminés',days:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],months:['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],dir:'ltr'},
+  de:{all:'Alle',live:'Live',upcoming:'Kommend',finished:'Beendet',today:'Heute',loading:'Laden...',noMatches:'Keine Spiele',search:'Suchen...',standings:'Tabelle',scorers:'Torschützen',totalM:'Spiele heute',liveN:'Live',leaguesN:'Ligen',finN:'Beendet',days:['So','Mo','Di','Mi','Do','Fr','Sa'],months:['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],dir:'ltr'},
+  es:{all:'Todo',live:'En vivo',upcoming:'Próximos',finished:'Terminados',today:'Hoy',loading:'Cargando...',noMatches:'Sin partidos',search:'Buscar...',standings:'Clasificación',scorers:'Goleadores',totalM:'Partidos hoy',liveN:'En vivo',leaguesN:'Ligas',finN:'Terminados',days:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],months:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],dir:'ltr'},
 };
 
 let lang = 'ar';
@@ -742,16 +753,112 @@ function selectDate(el, offset) {
 // ===================== LANGUAGE =====================
 function setLang(l) {
   lang = l;
+  const t = T[l];
   document.documentElement.lang = l;
-  document.documentElement.dir = T[l].dir;
-  document.getElementById('searchInput').placeholder = T[l].search;
-  document.getElementById('fAll').textContent = T[l].all;
-  document.getElementById('fLive').textContent = T[l].live;
-  document.getElementById('fUp').textContent = T[l].upcoming;
-  document.getElementById('fDone').textContent = T[l].finished;
+  document.documentElement.dir = t.dir;
+
+  // Search
+  const si = document.getElementById('searchInput');
+  if(si) si.placeholder = t.search;
+
+  // Filter buttons
+  document.getElementById('fAll').textContent = t.all;
+  document.getElementById('fLive').textContent = t.live;
+  document.getElementById('fUp').textContent = t.upcoming;
+  document.getElementById('fDone').textContent = t.finished;
+
+  // Live badge
+  const ll = document.getElementById('liveLabel');
+  if(ll) ll.textContent = ' ' + t.liveN;
+
+  // Stats labels
+  document.getElementById('stTotalL').textContent = t.totalM;
+  document.getElementById('stLiveL').textContent = t.liveN;
+  document.getElementById('stLeaguesL').textContent = t.leaguesN;
+  document.getElementById('stFinishedL').textContent = t.finN;
+
+  // Nav logo text stays GOALSPORT (brand name - no translate)
+
+  // Footer description
+  const fl = document.querySelector('.fl-desc');
+  if(fl){
+    const descs = {
+      ar:'نتائج مباريات مباشرة، جداول الترتيب، وأخبار كرة القدم بـ 5 لغات.',
+      en:'Live football results, standings, and news in 5 languages.',
+      fr:'Résultats en direct, classements et actualités en 5 langues.',
+      de:'Live-Fußballergebnisse, Tabellen und News in 5 Sprachen.',
+      es:'Resultados en vivo, clasificaciones y noticias en 5 idiomas.'
+    };
+    fl.textContent = descs[l] || descs['en'];
+  }
+
+  // Footer column titles
+  const ftitles = document.querySelectorAll('.fc-title');
+  const colTitles = {
+    ar:['الدوريات','GoalSport'],
+    en:['Leagues','GoalSport'],
+    fr:['Ligues','GoalSport'],
+    de:['Ligen','GoalSport'],
+    es:['Ligas','GoalSport']
+  };
+  if(ftitles.length >= 2){
+    ftitles[0].textContent = (colTitles[l]||colTitles['en'])[0];
+  }
+
+  // Footer links leagues
+  const leagueLinks = {
+    ar:['الدوري الإنجليزي','الدوري الإسباني','الدوري الألماني','دوري الأبطال','الدوري الفرنسي'],
+    en:['Premier League','La Liga','Bundesliga','Champions League','Ligue 1'],
+    fr:['Premier League','Liga','Bundesliga','Ligue des champions','Ligue 1'],
+    de:['Premier League','La Liga','Bundesliga','Champions League','Ligue 1'],
+    es:['Premier League','La Liga','Bundesliga','Champions League','Ligue 1']
+  };
+  const flinks = document.querySelectorAll('.fc-links:first-of-type a');
+  const ll2 = leagueLinks[l] || leagueLinks['en'];
+  flinks.forEach((a,i) => { if(ll2[i]) a.textContent = ll2[i]; });
+
+  // GoalSport links
+  const gsLinks = {
+    ar:['عن الموقع','تواصل معنا','سياسة الخصوصية','الإعلان معنا'],
+    en:['About','Contact Us','Privacy Policy','Advertise'],
+    fr:['À propos','Contactez-nous','Politique de confidentialité','Publicité'],
+    de:['Über uns','Kontakt','Datenschutz','Werbung'],
+    es:['Sobre nosotros','Contáctenos','Privacidad','Publicidad']
+  };
+  const gsL = gsLinks[l] || gsLinks['en'];
+  const allLinks = document.querySelectorAll('.fc-links');
+  if(allLinks.length >= 2){
+    const gsA = allLinks[1].querySelectorAll('a');
+    gsA.forEach((a,i) => { if(gsL[i]) a.textContent = gsL[i]; });
+  }
+
+  // Footer bottom copyright
+  const fb = document.querySelector('.footer-bottom');
+  if(fb){
+    const copyrights = {
+      ar:'© 2026 GoalSport — جميع الحقوق محفوظة',
+      en:'© 2026 GoalSport — All rights reserved',
+      fr:'© 2026 GoalSport — Tous droits réservés',
+      de:'© 2026 GoalSport — Alle Rechte vorbehalten',
+      es:'© 2026 GoalSport — Todos los derechos reservados'
+    };
+    const spans = fb.querySelectorAll('span');
+    if(spans[0]) spans[0].textContent = copyrights[l] || copyrights['en'];
+  }
+
+  // AD placeholder texts
+  document.querySelectorAll('.ad-ph').forEach(ad => {
+    if(!ad.dataset.orig) ad.dataset.orig = ad.textContent;
+  });
+
+  // Rebuild date tabs with new language
   buildDateTabs();
   applyFilters();
   updateStats();
+
+  // Set select value
+  const sel = document.getElementById('langSel');
+  if(sel) sel.value = l;
 }
 
 // ===================== CLOCK =====================
